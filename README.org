@@ -1,0 +1,87 @@
+#+TITLE: A Simple AoSoA container class
+
+* Motivation
+
+In scientific computing,
+the most common problem
+is to have a very large number of structures
+instead of a single one.
+
+The definition of a structure
+that represents a single object
+is not the best abstraction,
+as it has negative consequences
+on the memory layout.
+
+Although it can lead to more "surface" complexity,
+treating a collection of objects
+as the fundamental entity in the code
+is a more sensible abstraction,
+that leads to what is known as
+Data-Oriented design.
+
+* Examples
+See [[file:main.cpp][main.cpp]] for an example
+how to use the classes
+(especially for [[*The AoSoAElement class]]).
+
+* The AoSoA class
+The ~AoSoA~ class takes care only
+of abstracting the memory layout
+of a collection of homogeneous structures
+(that is, where all data members have the same type).
+
+Its constructor takes an already allocated pointer
+(single responsitiliby principle).
+The allocated memory is subject to some limitations:
+see [[*Limitations]].
+
+The data is accessed using two indices,
+an index ~idx~ to select the structure
+and another internal index ~icomponent~ to select the component.
+
+For example, if the array needs to contain
+complex double precision spinors in a gauge theory with N = 3,
+on an machine where the SIMD vector length is 512 bits,
+there will be 512/128 = 4 element per SIMD vector,
+and we will have ~0 <= icomponent < 12~.
+
+The indexing inside the structure
+is left to any other class
+(single responsibility principle).
+
+** Limitations
+ The size of the memory allocated
+ needs to be a multiple
+ of the size of the base object times the lenght of the vector.
+
+ In the example mentioned above,
+ the memory allocated needs to be a multiple of ~(12*64)~ bytes,
+ where 12 is the number of components in the object,
+ and 64 is the size of the vector in bytes.
+
+
+* The AoSoAElement class
+ A convenient lazy class
+ that represents a reference to single object
+ in a container.
+
+ This class is not necessary,
+ but it is provided in the hope that it is useful.
+
+ It is a wrapper around an index ~idx~
+ and a reference to an  ~AoSoA~ array.
+
+ Such objects can be created using operator []
+ from the ~AoSoA~ class.
+
+ The ~AoSoAElement~ class
+ also overloads operator [],
+ which returns a reference to a component.
+
+ For a copy of/const reference to a component,
+ use operator() instead.
+ 
+ It provides element-by-element operations
+ like assignment, ~+=~, ~*=~ and the like.
+
