@@ -25,6 +25,15 @@ See [[file:main.cpp][main.cpp]] for an example
 how to use the classes
 (especially for [[*The AoSoAElement class]]).
 
+C++11 is required to compile the code.
+It is possible to make the code C++03 compliant
+at the cost of more verbosity.
+
+To compile and run the example, simply:
+#+BEGIN_SRC bash
+$g++ -o main main.cpp && ./main
+#+END_SRC
+
 * The AoSoA class
 The ~AoSoA~ class takes care only
 of abstracting the memory layout
@@ -59,7 +68,6 @@ is left to any other class
  the memory allocated needs to be a multiple of ~(12*64)~ bytes,
  where 12 is the number of components in the object,
  and 64 is the size of the vector in bytes.
-
 
 * The AoSoAElement class
  A convenient lazy class

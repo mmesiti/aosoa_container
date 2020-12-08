@@ -7,10 +7,10 @@ int main(int argc, char *argv[]) {
 
   const int size = 80;
   const int ncomponents = 4;
-  using DataType = float;
-  const int VectorLength = 8 * 8 * sizeof(float);
+  using DataType = double;
+  const int VectorLengthBytes = 512 / 8;
   const int mem_size = size * ncomponents * sizeof(DataType);
-  auto arr = AoSoA<VectorLength / 8, ncomponents, DataType>(
+  auto arr = AoSoA<VectorLengthBytes, ncomponents, DataType>(
       std::malloc(mem_size), mem_size);
 
   std::cout << "Start:\n";
@@ -21,9 +21,9 @@ int main(int argc, char *argv[]) {
       arr[idx][icomp] = 4 * idx + icomp;
   }
 
-  arr[1] += (float)22;
+  arr[1] += (DataType)22;
   arr[2] -= arr[1];
-  arr[3] = (float)22;
+  arr[3] = (DataType)22;
 
   double p[ncomponents] = {114, 335, 324, 237};
 
